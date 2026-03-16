@@ -31,7 +31,7 @@ namespace Tema3
 
             if (!_isDrawn)
             {
-                if (_points.Count > 0 && clickPoint.X <= _points[_points.Count - 1].X)
+                if (_points.Count > 0 && clickPoint.X <= _points[^1].X)
                     return;
 
                 _points.Add(clickPoint);
@@ -76,10 +76,11 @@ namespace Tema3
             double newX = mousePos.X - _dragOffset.X;
             double newY = mousePos.Y - _dragOffset.Y;
 
+
             if (_draggingIndex == 0)
                 newX = Math.Max(0, Math.Min(_points[1].X - 1, newX));
             else if (_draggingIndex == _points.Count - 1)
-                newX = Math.Max(_points[_points.Count - 2].X + 1, Math.Min(_canvas.ActualWidth, newX));
+                newX = Math.Max(_points[^2].X + 1, Math.Min(_canvas.ActualWidth, newX));
             else
                 newX = Math.Max(_points[_draggingIndex - 1].X + 1, Math.Min(_points[_draggingIndex + 1].X - 1, newX));
 
@@ -126,21 +127,21 @@ namespace Tema3
             };
 
             double minX = _points[0].X;
-            double maxX = _points[_points.Count - 1].X;
+            double maxX = _points[^1].X;
 
-            for (double x = minX; x <= maxX; x += 1)
+            for (double u = minX; u <= maxX; u += 1)
             {
-                double y = Polynom_LagrangeY(x);
-                _polyline.Points.Add(new Point(x, y));
+                double y = Polynom_LagrangeY(u);
+                _polyline.Points.Add(new Point(u, y));
             }
 
             _canvas.Children.Add(_polyline);
         }
+
         private double Polynom_LagrangeY(double x)
         {
             double result = 0;
             int n = _points.Count;
-
             for (int i = 0; i < n; i++)
             {
                 double term = _points[i].Y;
